@@ -1,5 +1,5 @@
 {
-    "name": "Marimo Development Environment",
+    "name": "Marimo running in agentic mode",
     "build": {
         "dockerfile": "Dockerfile",
         "context": ".."
@@ -28,7 +28,7 @@
         }
     },
     "forwardPorts": [2718],
-    "postCreateCommand": "uv pip install -r requirements.txt && uv pip install black isort pytest marimo",
+    "postCreateCommand": "pip install uv && uv pip install -r requirements.txt && uv pip install black isort pytest marimo",
     "postStartCommand": "bash -c 'export OPENAI_API_KEY=${OPENAI_API_KEY} && uv tool run marimo run --sandbox notebook.py'",
     "remoteUser": "vscode",
     "features": {
