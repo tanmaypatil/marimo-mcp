@@ -1,0 +1,44 @@
+{
+    "name": "Marimo Development Environment",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": ".."
+    },
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "python.defaultInterpreterPath": "/workspaces/app/.venv/bin/python",
+                "python.linting.enabled": true,
+                "python.linting.pylintEnabled": true,
+                "python.formatting.provider": "black",
+                "editor.formatOnSave": true,
+                "editor.codeActionsOnSave": {
+                    "source.organizeImports": true
+                },
+                "terminal.integrated.defaultProfile.linux": "zsh"
+            },
+            "extensions": [
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "ms-azuretools.vscode-docker",
+                "streetsidesoftware.code-spell-checker",
+                "github.copilot",
+                "github.vscode-github-actions"
+            ]
+        }
+    },
+    "forwardPorts": [2718],
+    "postCreateCommand": "uv pip install -r requirements.txt && uv pip install black isort pytest marimo",
+    "postStartCommand": "bash -c 'export OPENAI_API_KEY=${OPENAI_API_KEY} && uv tool run marimo run --sandbox notebook.py'",
+    "remoteUser": "vscode",
+    "features": {
+        "ghcr.io/devcontainers/features/github-cli:1": {}
+    },
+    "mounts": [
+        "source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached"
+    ],
+    "remoteEnv": {
+        "PYTHONPATH": "${containerWorkspaceFolder}",
+        "OPENAI_API_KEY": "${localEnv:OPENAI_API_KEY}"
+    }
+}
