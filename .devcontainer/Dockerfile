@@ -10,29 +10,25 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     vim \
     && rm -rf /var/lib/apt/lists/*
 
-# Install uv package manager and ensure it's in PATH immediately
-RUN curl -sSf https://astral.sh/uv/install.sh | sh && \
-    ln -sf /root/.cargo/bin/uv /usr/local/bin/uv
+# Install uv package manager without relying on PATH updates
+RUN curl -sSf https://astral.sh/uv/install.sh | sh 
 
-# Update PATH for current session
-ENV PATH="/root/.cargo/bin:${PATH}"
+# Create aliases and set up PATH for interactive shells
+RUN touch ~/.zshrc && \
+    echo 'export PATH="/root/.cargo/bin:$PATH"' >> ~/.zshrc && \
+    echo 'export PATH="/workspaces/app/.venv/bin:$PATH"' >> ~/.zshrc && \
+    echo 'alias python="python3"' >> ~/.zshrc && \
+    echo 'alias uvx="uv tool run"' >> ~/.zshrc && \
+    mkdir -p /etc/zsh && \
+    touch /etc/zsh/zshenv && \
+    echo 'export PATH="/root/.cargo/bin:$PATH"' >> /etc/zsh/zshenv && \
+    echo 'alias uvx="uv tool run"' >> /etc/zsh/zshenv
 
 # Set working directory
 WORKDIR /workspaces/app
 
-# Configure zsh with aliases and PATH
-RUN touch ~/.zshrc && \
-    echo 'export PATH="/workspaces/app/.venv/bin:$PATH"' >> ~/.zshrc && \
-    echo 'export PATH="/root/.cargo/bin:$PATH"' >> ~/.zshrc && \
-    echo 'alias python="python3"' >> ~/.zshrc && \
-    echo 'alias uvx="uv tool run"' >> ~/.zshrc
-
-# Ensure PATH and aliases are available in all shells
-RUN echo 'export PATH="/root/.cargo/bin:$PATH"' >> /etc/zsh/zshenv && \
-    echo 'alias uvx="uv tool run"' >> /etc/zsh/zshenv
-
-# Create a Python virtual environment using the full path to uv
-RUN /usr/local/bin/uv venv /workspaces/app/.venv
+# Create a Python virtual environment using the absolute path to uv
+RUN /root/.cargo/bin/uv venv /workspaces/app/.venv
 
 # Update PATH to use the venv by default
-ENV PATH="/workspaces/app/.venv/bin:${PATH}"
+ENV PATH="/workspaces/app/.venv/bin:/root/.cargo/bin:${PATH}"
