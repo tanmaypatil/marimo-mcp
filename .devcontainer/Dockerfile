@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && npm install -g npm@latest \
     && node -v && npm -v && npx -v || echo "NPX not found, installing..." && npm install -g npx
 # Set working directory
-WORKDIR /workspaces/app
+WORKDIR /workspaces/marimo-mcp
 
 # Configure shell settings
 RUN touch ~/.zshrc && \
@@ -26,7 +26,7 @@ RUN touch ~/.zshrc && \
     echo 'alias uvx="uv tool run"' >> /etc/zsh/zshenv
 
 # Use Python's built-in venv module to create the virtual environment
-RUN python -m venv /workspaces/app/.venv
+RUN python -m venv /workspaces/marimo-mcp/.venv
 
 # Update PATH to use the venv by default
-ENV PATH="/workspaces/app/.venv/bin:${PATH}"
+ENV PATH="/workspaces/marimo-mcp/.venv/bin:${PATH}"
