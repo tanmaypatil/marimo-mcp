@@ -25,8 +25,6 @@ RUN touch ~/.zshrc && \
     touch /etc/zsh/zshenv && \
     echo 'alias uvx="uv tool run"' >> /etc/zsh/zshenv
 
-# Use Python's built-in venv module to create the virtual environment
-RUN python -m venv /workspaces/marimo-mcp/.venv
 
 # Update PATH to use the venv by default
 ENV PATH="/workspaces/marimo-mcp/.venv/bin:${PATH}"

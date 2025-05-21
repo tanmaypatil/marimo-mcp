@@ -28,8 +28,8 @@
         }
     },
     "forwardPorts": [2718],
-    "postCreateCommand": "zsh -i -c 'source /workspaces/marimo-mcp/.venv/bin/activate && pip install uv && uv pip install -r requirements.txt && uv pip install black isort pytest marimo'",
-    "postStartCommand": "zsh -i -c 'source /workspaces/marimo-mcp/.venv/bin/activate && export OPENAI_API_KEY=${OPENAI_API_KEY} && uv tool run marimo run --sandbox notebook.py'",
+    "postCreateCommand": "python -m venv /workspaces/marimo-mcp/.venv && source /workspaces/marimo-mcp/.venv/bin/activate && pip install uv && uv pip install -r requirements.txt && uv pip install black isort pytest marimo",
+    "postStartCommand": "source /workspaces/marimo-mcp/.venv/bin/activate && export OPENAI_API_KEY=${OPENAI_API_KEY} && uv tool run marimo run --sandbox notebook.py",
     "remoteUser": "vscode",
     "features": {
         "ghcr.io/devcontainers/features/github-cli:1": {}
